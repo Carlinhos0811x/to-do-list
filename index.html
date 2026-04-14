@@ -65,9 +65,10 @@
 
     #add-task-button {
       position: absolute;
-      right: 10px;
-      bottom: 0;
-      transform: translateY(50%);
+      right: 12px;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
       width: 48px;
       height: 48px;
       border: none;
@@ -84,7 +85,7 @@
     }
 
     #add-task-button:hover {
-      transform: translateY(50%) scale(1.05);
+      transform: translateY(-50%) scale(1.05);
       background: #3578c1;
     }
 
@@ -107,8 +108,8 @@
 
     .todo-list li {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      align-items: stretch;
       padding: 14px 16px;
       border: 1px solid var(--card-border);
       border-radius: 14px;
@@ -116,8 +117,41 @@
       transition: background-color 0.2s ease, transform 0.2s ease;
     }
 
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      cursor: pointer;
+    }
+
     .todo-list li:hover {
       background-color: #fbfcff;
+    }
+
+    .task-note {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      background: #f4f7fb;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .task-note.active {
+      display: block;
+    }
+
+    .task-note textarea {
+      width: 100%;
+      min-height: 90px;
+      border: 1px solid var(--checkbox-border);
+      border-radius: 12px;
+      padding: 12px;
+      resize: vertical;
+      font: inherit;
+      background: #ffffff;
+      color: inherit;
     }
 
     .todo-list input[type="checkbox"] {
@@ -217,24 +251,39 @@
     </div>
     <ul class="todo-list">
       <li>
-        <input type="checkbox" id="task1">
-        <label for="task1">Estudar HTML</label>
+        <div class="task-row">
+          <input type="checkbox" id="task1">
+          <label for="task1">Estudar HTML</label>
+        </div>
+        <div class="task-note"><textarea placeholder="Adicionar informações sobre a tarefa..."></textarea></div>
       </li>
       <li>
-        <input type="checkbox" id="task2">
-        <label for="task2">Praticar CSS</label>
+        <div class="task-row">
+          <input type="checkbox" id="task2">
+          <label for="task2">Praticar CSS</label>
+        </div>
+        <div class="task-note"><textarea placeholder="Adicionar informações sobre a tarefa..."></textarea></div>
       </li>
       <li>
-        <input type="checkbox" id="task3">
-        <label for="task3">Aprender JavaScript</label>
+        <div class="task-row">
+          <input type="checkbox" id="task3">
+          <label for="task3">Aprender JavaScript</label>
+        </div>
+        <div class="task-note"><textarea placeholder="Adicionar informações sobre a tarefa..."></textarea></div>
       </li>
       <li>
-        <input type="checkbox" id="task4">
-        <label for="task4">Fazer revisão</label>
+        <div class="task-row">
+          <input type="checkbox" id="task4">
+          <label for="task4">Fazer revisão</label>
+        </div>
+        <div class="task-note"><textarea placeholder="Adicionar informações sobre a tarefa..."></textarea></div>
       </li>
       <li>
-        <input type="checkbox" id="task5">
-        <label for="task5">Criar projeto</label>
+        <div class="task-row">
+          <input type="checkbox" id="task5">
+          <label for="task5">Criar projeto</label>
+        </div>
+        <div class="task-note"><textarea placeholder="Adicionar informações sobre a tarefa..."></textarea></div>
       </li>
     </ul>
   </div>
@@ -269,21 +318,51 @@
       const taskId = `task${nextTaskId++}`;
 
       const listItem = document.createElement('li');
+      const row = document.createElement('div');
       const checkbox = document.createElement('input');
       const label = document.createElement('label');
+      const note = document.createElement('div');
+      const textarea = document.createElement('textarea');
 
+      row.className = 'task-row';
       checkbox.type = 'checkbox';
       checkbox.id = taskId;
-      checkbox.className = 'task-checkbox';
-
       label.htmlFor = taskId;
       label.textContent = text;
+      note.className = 'task-note';
+      textarea.placeholder = 'Adicionar informações sobre a tarefa...';
 
-      listItem.appendChild(checkbox);
-      listItem.appendChild(label);
+      note.appendChild(textarea);
+      row.appendChild(checkbox);
+      row.appendChild(label);
+      listItem.appendChild(row);
+      listItem.appendChild(note);
       todoList.appendChild(listItem);
+
+      initializeTaskItem(listItem);
       listItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
+
+    function initializeTaskItem(listItem) {
+      const row = listItem.querySelector('.task-row');
+      const note = listItem.querySelector('.task-note');
+
+      row.addEventListener('click', (event) => {
+        if (event.target.closest('input[type="checkbox"]')) {
+          return;
+        }
+        note.classList.toggle('active');
+        if (note.classList.contains('active')) {
+          note.querySelector('textarea').focus();
+        }
+      });
+
+      note.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    }
+
+    document.querySelectorAll('.todo-list li').forEach(initializeTaskItem);
   </script>
 </body>
 </html>
