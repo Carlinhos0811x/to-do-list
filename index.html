@@ -1,63 +1,289 @@
 <!DOCTYPE html>
-<!-- index.html - Página principal da aplicação To-Do List -->
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>To-Do List com Prioridades</title>
-    <!-- Link para o arquivo de estilos CSS -->
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <title>Minha To-Do List</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --text: #333333;
+      --muted: #7d7d7d;
+      --border: #d7dde5;
+      --card-border: #eff3f8;
+      --accent: #4a90e2;
+      --input-bg: #ffffff;
+      --checkbox-bg: #ffffff;
+      --checkbox-border: #cbd4e1;
+      --checkbox-checked: #4a90e2;
+      --checkbox-checked-bg: #e6f0ff;
+      --focus-rgb: 74, 144, 226;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .todo-container {
+      width: min(520px, 100%);
+      background: var(--surface);
+      padding: 28px 32px;
+      border-radius: 16px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+
+    .todo-container h1 {
+      margin: 0 0 18px;
+      font-size: 1.9rem;
+      letter-spacing: -0.03em;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .todo-container input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      padding-right: 60px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      background: var(--input-bg);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    #add-task-button {
+      position: absolute;
+      right: 10px;
+      bottom: 0;
+      transform: translateY(50%);
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 1.7rem;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 10px 24px rgba(74, 144, 226, 0.24);
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    #add-task-button:hover {
+      transform: translateY(50%) scale(1.05);
+      background: #3578c1;
+    }
+
+    #add-task-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(var(--focus-rgb), 0.26);
+    }
+
+    .todo-container input[type="text"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(var(--focus-rgb), 0.12);
+    }
+
+    .todo-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .todo-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      margin-bottom: 12px;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .todo-list li:hover {
+      background-color: #fbfcff;
+    }
+
+    .todo-list input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--checkbox-border);
+      border-radius: 8px;
+      background: var(--checkbox-bg);
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+    }
+
+    .todo-list input[type="checkbox"]::after {
+      content: "";
+      position: absolute;
+      inset: 4px auto auto 6px;
+      width: 5px;
+      height: 10px;
+      border: solid var(--checkbox-checked);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) scale(0);
+      opacity: 0;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .todo-list input[type="checkbox"]:checked {
+      border-color: var(--checkbox-checked);
+      background: var(--checkbox-checked-bg);
+    }
+
+    .todo-list input[type="checkbox"]:checked::after {
+      transform: rotate(45deg) scale(1);
+      opacity: 1;
+    }
+
+    .todo-list input[type="checkbox"]:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(var(--focus-rgb), 0.18);
+      transform: scale(1.02);
+    }
+
+    .todo-list input[type="checkbox"] + label {
+      cursor: pointer;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .todo-list input[type="checkbox"]:checked + label {
+      text-decoration: line-through;
+      color: var(--muted);
+      opacity: 0.75;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #08121e;
+        --surface: #0f1b2d;
+        --text: #f3f6fa;
+        --muted: #9aa5b8;
+        --border: #28426a;
+        --card-border: #203551;
+        --accent: #7ab4ff;
+        --input-bg: #13243b;
+        --checkbox-bg: #0f1b2d;
+        --checkbox-border: #426a9a;
+        --checkbox-checked: #7ab4ff;
+        --checkbox-checked-bg: rgba(122, 180, 255, 0.16);
+        --focus-rgb: 122, 180, 255;
+      }
+
+      body {
+        background: var(--bg);
+      }
+
+      .todo-container {
+        box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+      }
+
+      .todo-list li {
+        background: #10243f;
+      }
+
+      .todo-list li:hover {
+        background-color: #162d4c;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <!-- Cabeçalho da aplicação com título e descrição -->
-    <header>
-        <h1>Minha To-Do List</h1>
-        <p>Gerencie suas tarefas por prioridade</p>
-    </header>
+  <div class="todo-container">
+    <h1>Minha To-Do List</h1>
+    <div class="input-group">
+      <input id="new-task" type="text" placeholder="Adicionar nova tarefa...">
+      <button id="add-task-button" aria-label="Adicionar tarefa">+</button>
+    </div>
+    <ul class="todo-list">
+      <li>
+        <input type="checkbox" id="task1">
+        <label for="task1">Estudar HTML</label>
+      </li>
+      <li>
+        <input type="checkbox" id="task2">
+        <label for="task2">Praticar CSS</label>
+      </li>
+      <li>
+        <input type="checkbox" id="task3">
+        <label for="task3">Aprender JavaScript</label>
+      </li>
+      <li>
+        <input type="checkbox" id="task4">
+        <label for="task4">Fazer revisão</label>
+      </li>
+      <li>
+        <input type="checkbox" id="task5">
+        <label for="task5">Criar projeto</label>
+      </li>
+    </ul>
+  </div>
+  <script>
+    const newTaskInput = document.getElementById('new-task');
+    const addTaskButton = document.getElementById('add-task-button');
+    const todoList = document.querySelector('.todo-list');
+    let nextTaskId = 6;
 
-    <!-- Conteúdo principal da aplicação -->
-    <main>
-        <!-- Área para entrada de novas tarefas -->
-        <div class="input-area">
-            <input type="text" id="task-input" placeholder="Digite uma tarefa">
-            <!-- Seleção de prioridade da tarefa -->
-            <select id="priority-select">
-                <option value="high">Alta</option>
-                <option value="medium">Média</option>
-                <option value="low">Baixa</option>
-            </select>
-            <!-- Botão para adicionar a tarefa -->
-            <button id="add-task">Adicionar</button>
-        </div>
+    newTaskInput.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter') {
+        return;
+      }
+      addNewTask();
+    });
 
-        <!-- Lista de tarefas existentes -->
-        <ul class="task-list" id="task-list">
-            <!-- Tarefa de exemplo com prioridade alta -->
-            <li class="high">
-                <span>Estudar HTML</span>
-                <button class="complete-btn">Concluir</button>
-            </li>
+    addTaskButton.addEventListener('click', addNewTask);
 
-            <!-- Tarefa de exemplo com prioridade média, já concluída -->
-            <li class="medium completed">
-                <span>Revisar CSS</span>
-                <button class="complete-btn">Concluída</button>
-            </li>
+    function addNewTask() {
+      const text = newTaskInput.value.trim();
+      if (!text) {
+        newTaskInput.focus();
+        return;
+      }
 
-            <!-- Tarefa de exemplo com prioridade baixa -->
-            <li class="low">
-                <span>Ler sobre IA</span>
-                <button class="complete-btn">Concluir</button>
-            </li>
-        </ul>
-    </main>
+      addTodoItem(text);
+      newTaskInput.value = '';
+      newTaskInput.focus();
+    }
 
-    <!-- Rodapé da aplicação -->
-    <footer>
-        <p>Desafio IA no Desenvolvimento de Software</p>
-    </footer>
+    function addTodoItem(text) {
+      const taskId = `task${nextTaskId++}`;
 
-    <!-- Script JavaScript para funcionalidade interativa -->
-    <script src="js/script.js"></script>
+      const listItem = document.createElement('li');
+      const checkbox = document.createElement('input');
+      const label = document.createElement('label');
+
+      checkbox.type = 'checkbox';
+      checkbox.id = taskId;
+      checkbox.className = 'task-checkbox';
+
+      label.htmlFor = taskId;
+      label.textContent = text;
+
+      listItem.appendChild(checkbox);
+      listItem.appendChild(label);
+      todoList.appendChild(listItem);
+      listItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  </script>
 </body>
 </html>
