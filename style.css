@@ -133,7 +133,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #695c89;
+    --bg:#6b5da9;
     --surface: #0f1b2d;
     --text: #f3f6fa;
     --muted: #9aa5b8;
