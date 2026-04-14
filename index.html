@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!-- index.html - Página principal da aplicação To-Do List -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List com Prioridades</title>
+    <!-- Link para o arquivo de estilos CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Cabeçalho da aplicação com título e descrição -->
+    <header>
+        <h1>Minha To-Do List</h1>
+        <p>Gerencie suas tarefas por prioridade</p>
+    </header>
+
+    <!-- Conteúdo principal da aplicação -->
+    <main>
+        <!-- Área para entrada de novas tarefas -->
+        <div class="input-area">
+            <input type="text" id="task-input" placeholder="Digite uma tarefa">
+            <!-- Seleção de prioridade da tarefa -->
+            <select id="priority-select">
+                <option value="high">Alta</option>
+                <option value="medium">Média</option>
+                <option value="low">Baixa</option>
+            </select>
+            <!-- Botão para adicionar a tarefa -->
+            <button id="add-task">Adicionar</button>
+        </div>
+
+        <!-- Lista de tarefas existentes -->
+        <ul class="task-list" id="task-list">
+            <!-- Tarefa de exemplo com prioridade alta -->
+            <li class="high">
+                <span>Estudar HTML</span>
+                <button class="complete-btn">Concluir</button>
+            </li>
+
+            <!-- Tarefa de exemplo com prioridade média, já concluída -->
+            <li class="medium completed">
+                <span>Revisar CSS</span>
+                <button class="complete-btn">Concluída</button>
+            </li>
+
+            <!-- Tarefa de exemplo com prioridade baixa -->
+            <li class="low">
+                <span>Ler sobre IA</span>
+                <button class="complete-btn">Concluir</button>
+            </li>
+        </ul>
+    </main>
+
+    <!-- Rodapé da aplicação -->
+    <footer>
+        <p>Desafio IA no Desenvolvimento de Software</p>
+    </footer>
+
+    <!-- Script JavaScript para funcionalidade interativa -->
+    <script src="js/script.js"></script>
+</body>
+</html>
